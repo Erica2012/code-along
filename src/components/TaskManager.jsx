@@ -1,23 +1,43 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+
+import { v4 as uuid } from "uuid";
+
 import TaskItem from "./TaskItem";
-import background from "../assets/img.jpg";
+// import background from "../assets/img.jpg";
 
 
 
-function TaskManager() {
-    const [tasks, setTasks] = useState([]);
+const getTasksFromLocalStorage = () => {
+    // get the rasks from local storage
+        const savedTasks = localStorage.getItem("tasks");
+        if (!savedTasks) return [];
+        return JSON.parse(savedTasks);
+    };
+    
+    function TaskManager () {
+    const [tasks, setTasks] = useState(getTasksFromLocalStorage);
     const [input, setInput] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if(input === "") return;
-        
-        setTasks([input, ...tasks]);
-        setInput("");
-    };
 
-    const handleDelete = idx => {
-        const newTask =tasks.filter(task => task !== idx);
+        const newTask = {
+            id: uuid(),
+            text: input,
+            completed: false,
+        };
+        
+        setTasks([newTask, ...tasks]);
+        setInput("");
+        }
+
+     useEffect(() => {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    }, [tasks]);
+
+    const handleDelete = (id) => {
+        const newTask =tasks.filter((task) => task.id !== id);
         setTasks(newTask);
     }
 
@@ -33,7 +53,7 @@ function TaskManager() {
                
                 <input type="text"
                  className="border-2 border-blue-400 p-2 rounded-md outline-none w-10/12" 
-                onChange ={(e) => setInput(e,target,value)}
+                onChange ={(e) => setInput(e.target.value)}
                 value={input}
 
                 />
@@ -48,7 +68,7 @@ function TaskManager() {
 <div className="space-y-2 overflow-y-auto h-56">
         {
             tasks.map((task) => (
-                 <TaskItem task={task} handleDelete={handleDelete}/> 
+                 <TaskItem key={task.id} task={task} handleDelete={handleDelete}/> 
             ))
         }
      
