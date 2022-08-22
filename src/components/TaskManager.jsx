@@ -1,21 +1,22 @@
 import React, {useEffect, useState} from "react";
-
 import { v4 as uuid } from "uuid";
 
 import TaskItem from "./TaskItem";
 // import background from "../assets/img.jpg";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 
 
-const getTasksFromLocalStorage = () => {
-    // get the rasks from local storage
-        const savedTasks = localStorage.getItem("tasks");
-        if (!savedTasks) return [];
-        return JSON.parse(savedTasks);
-    };
+// const getTasksFromLocalStorage = () => {
+//     // get the rasks from local storage
+//         const savedTasks = localStorage.getItem("tasks");
+//         if (!savedTasks) return [];
+//         return JSON.parse(savedTasks);
+    // };
     
     function TaskManager () {
-    const [tasks, setTasks] = useState(getTasksFromLocalStorage);
+    // const [tasks, setTasks] = useState(getTasksFromLocalStorage);
+    const {data, setValue} = useLocalStorage("tasks", []);
     const [input, setInput] = useState("");
 
     const handleSubmit = (e) => {
@@ -28,17 +29,17 @@ const getTasksFromLocalStorage = () => {
             completed: false,
         };
         
-        setTasks([newTask, ...tasks]);
+        setValue(newTask);
         setInput("");
-        }
+        };
 
-     useEffect(() => {
-        localStorage.setItem("tasks", JSON.stringify(tasks));
-    }, [tasks]);
+    //  useEffect(() => {
+    //     localStorage.setItem("tasks", JSON.stringify(tasks));
+    // }, [tasks]);
 
     const handleDelete = (id) => {
-        const newTask =tasks.filter((task) => task.id !== id);
-        setTasks(newTask);
+        const newTask = data.filter((task) => task.id !== id);
+        setValue(newTask);
     }
 
 
@@ -67,8 +68,8 @@ const getTasksFromLocalStorage = () => {
 
 <div className="space-y-2 overflow-y-auto h-56">
         {
-            tasks.map((task) => (
-                 <TaskItem key={task.id} task={task} handleDelete={handleDelete}/> 
+            data.map((task) => (
+                 <TaskItem task={task} /> 
             ))
         }
      
