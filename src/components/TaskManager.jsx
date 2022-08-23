@@ -5,14 +5,6 @@ import TaskItem from "./TaskItem";
 // import background from "../assets/img.jpg";
 import useLocalStorage from "../hooks/useLocalStorage";
 
-
-
-// const getTasksFromLocalStorage = () => {
-//     // get the rasks from local storage
-//         const savedTasks = localStorage.getItem("tasks");
-//         if (!savedTasks) return [];
-//         return JSON.parse(savedTasks);
-    // };
     
     function TaskManager () {
     // const [tasks, setTasks] = useState(getTasksFromLocalStorage);
@@ -33,9 +25,6 @@ import useLocalStorage from "../hooks/useLocalStorage";
         setInput("");
         };
 
-    //  useEffect(() => {
-    //     localStorage.setItem("tasks", JSON.stringify(tasks));
-    // }, [tasks]);
 
     const handleDelete = (id) => {
         const newTask = data.filter((task) => task.id !== id);
