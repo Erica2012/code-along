@@ -19,7 +19,7 @@ function ProductList() {
   //       setProducts(results.data);
   //     };
   //     getProducts();
-  // },[]);
+  // },[data]);
   //  console.log(data);
 
   if (isLoading) return <Spinner />;
