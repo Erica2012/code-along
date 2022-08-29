@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import Product from "../components/Product";
-import useAxios from "../hooks/useAxios";
 import Spinner from "../components/Spinner";
+import useAxios from "../hooks/useAxios";
 
 function ProductList() {
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
   const { data, isLoading, error } = useAxios(
     "https://api.escuelajs.co/api/v1/products"
   );
