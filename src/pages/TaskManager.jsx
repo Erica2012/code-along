@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { v4 as uuid } from "uuid";
-
 import TaskItem from "../components/TaskItem";
 // import background from "../assets/img.jpg";
 import { useTaskContext } from "../Context/tasksContext";
-
 
 function TaskManager() {
   // const [tasks, setTasks] = useState(getTasksFromLocalStorage);
@@ -21,16 +19,45 @@ function TaskManager() {
       completed: false,
     };
 
-    setValue(newTask, ...tasks);
+    setValue([newTask, ...tasks]);
     setInput("");
   };
 
   const handleDelete = (id) => {
-    const newTask = tasks.filter((task) => task.id !== id);
-    setValue(newTask);
+    const newTasks = tasks.filter((task) => task.id !== id);
+    setValue(newTasks);
   };
 
-  console.log(tasks)
+  const handleCompleted = (id) => {
+    const newTasks = tasks.map((task) => {
+      if (task.id === id) {
+        return {
+          ...task,
+          completed: !task.completed,
+        };
+      }
+      return task;
+    });
+    setValue(newTasks);
+  };
+
+  const handleEdit = (id) => {
+    const newTasks = tasks.filter((tasks) => {
+      if (tasks.id === id) {
+        setInput(tasks.text);
+        return false;
+      }
+      return tasks;
+      
+    });
+    setValue(newTasks);
+  };
+
+  useEffect(()=> {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  console.log(tasks);
 
   return (
     <div className="h-screen w-screen bg-blue-600 flex justify-center items-center">
@@ -58,7 +85,13 @@ function TaskManager() {
 
         <div className="space-y-2 overflow-y-auto h-56">
           {tasks.map((task) => (
-            <TaskItem task={task} handleDelete={handleDelete} />
+            <TaskItem
+              key={task.id}
+              task={task}
+              handleDelete={handleDelete}
+              handleCompleted={handleCompleted}
+              handleEdit={handleEdit}
+            />
           ))}
         </div>
       </div>
